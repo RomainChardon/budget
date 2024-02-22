@@ -1,0 +1,54 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+.main{
+    height: 100%;
+    background: #0022f1;
+}
+
+.sidebar{
+    background: #FF0000;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+/* MOBILE */
+@media screen and (max-width: 640px){
+    .main, .sidebar{
+        float: none;
+        width: 100%;
+    }
+
+    .sidebar {
+        height: 40px;
+        flex-direction: row;
+    }
+
+    .main {
+        background: #9dff00;
+    }
+}
+
+/* ORDI */
+@media screen and (min-width: 640px){
+
+    .main, .sidebar {
+        float:left;
+    }
+
+    .main{
+        width: 75%;
+    }
+    .sidebar{
+        flex-direction: column;
+        width: 25%;
+        height: 100%;
+    }
+}
