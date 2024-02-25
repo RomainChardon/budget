@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CategorieRevenu index{% endblock %}
+
+{% block body %}
+    <h1>CategorieRevenu index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for categorie_revenu in categorie_revenus %}
+            <tr>
+                <td>{{ categorie_revenu.id }}</td>
+                <td>{{ categorie_revenu.name }}</td>
+                <td>
+                    <a href="{{ path('app_categorie_revenu_show', {'id': categorie_revenu.id}) }}">show</a>
+                    <a href="{{ path('app_categorie_revenu_edit', {'id': categorie_revenu.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_categorie_revenu_new') }}">Create new</a>
+{% endblock %}

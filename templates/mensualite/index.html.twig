@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mensualite index{% endblock %}
+
+{% block body %}
+    <h1>Mensualite index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Actif</th>
+                <th>SoldeDepart</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for mensualite in mensualites %}
+            <tr>
+                <td>{{ mensualite.id }}</td>
+                <td>{{ mensualite.nom }}</td>
+                <td>{{ mensualite.actif }}</td>
+                <td>{{ mensualite.soldeDepart }}</td>
+                <td>
+                    <a href="{{ path('app_mensualite_show', {'id': mensualite.id}) }}">show</a>
+                    <a href="{{ path('app_mensualite_edit', {'id': mensualite.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_mensualite_new') }}">Create new</a>
+{% endblock %}

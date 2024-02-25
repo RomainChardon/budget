@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mensualite{% endblock %}
+
+{% block body %}
+    <h1>Mensualite</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ mensualite.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ mensualite.nom }}</td>
+            </tr>
+            <tr>
+                <th>Actif</th>
+                <td>{{ mensualite.actif }}</td>
+            </tr>
+            <tr>
+                <th>SoldeDepart</th>
+                <td>{{ mensualite.soldeDepart }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_mensualite_index') }}">back to list</a>
+
+    <a href="{{ path('app_mensualite_edit', {'id': mensualite.id}) }}">edit</a>
+
+    {{ include('mensualite/_delete_form.html.twig') }}
+{% endblock %}

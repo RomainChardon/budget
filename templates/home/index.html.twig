@@ -3,5 +3,13 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    Home
+    {% if ficheActif|length == 1 %}
+        {% for fiche in ficheActif  %}
+            <h3>{{ fiche.nom }}</h3>
+        {% endfor %}
+    {% elseif ficheActif|length > 1 %}
+        <p>Plusieur fiche</p>
+    {% else %}
+        <a href="{{ path('app_mensualite_new') }}">Créer une fiche</a>
+    {% endif %}
 {% endblock %}

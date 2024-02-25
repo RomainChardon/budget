@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: #b9b9bb;
 }
 
 html, body {
@@ -14,9 +15,43 @@ html, body {
 }
 
 .sidebar{
-    background: #FF0000;
+    position: relative;
+    background: #1f1e25;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px 0 15px;
+}
+
+.sidebar a:hover {
+    color: #fff;
+}
+
+/* Config */
+
+.categorie-container {
+border: 1px solid #ccc;
+}
+
+.categorie-head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px 15px;
+}
+
+.categorie-liste {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.categorie-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px 15px;
+    background: #0c0c0d;
 }
 
 /* MOBILE */
@@ -27,13 +62,14 @@ html, body {
     }
 
     .sidebar {
-        height: 40px;
+        min-height: 40px;
         flex-direction: row;
     }
 
     .main {
-        background: #9dff00;
+        background: #232327;
     }
+
 }
 
 /* ORDI */

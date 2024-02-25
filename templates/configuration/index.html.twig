@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Configuration{% endblock %}
+
+{% block body %}
+    {{ app.user.email }}
+    <div>
+        <div class="categorie-container">
+            <div class="categorie-head">
+                <p>Categorie depense</p>
+                <a href="{{ path('app_categorie_depense_new') }}">new</a>
+            </div>
+            <div class="categorie-liste">
+                {% for categorie in categorieDepense %}
+                    <div class="categorie-row">
+                        <p>{{ categorie.name }}</p>
+                        <a href="{{ path('app_categorie_depense_delete', {'id':categorie.id}) }}">delete</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="categorie-container">
+            <div class="categorie-head">
+                <p>Categorie revenu</p>
+                <a href="{{ path('app_categorie_revenu_new') }}">new</a>
+            </div>
+            <div class="categorie-liste">
+                {% for categorie in categorieRevenu %}
+                    <div class="categorie-row">
+                        <p>{{ categorie.name }}</p>
+                        <a href="{{ path('app_categorie_revenu_delete', {'id':categorie.id}) }}">delete</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
