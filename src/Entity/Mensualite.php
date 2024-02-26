@@ -33,10 +33,14 @@ class Mensualite
     #[ORM\Column]
     private ?float $soldeDepart = null;
 
+    #[ORM\OneToMany(targetEntity: Prevues::class, mappedBy: 'mensualite')]
+    private Collection $prevues;
+
     public function __construct()
     {
         $this->depenses = new ArrayCollection();
         $this->revenues = new ArrayCollection();
+        $this->prevues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -148,6 +152,36 @@ class Mensualite
     public function setSoldeDepart(float $soldeDepart): static
     {
         $this->soldeDepart = $soldeDepart;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Prevues>
+     */
+    public function getPrevues(): Collection
+    {
+        return $this->prevues;
+    }
+
+    public function addPrevue(Prevues $prevue): static
+    {
+        if (!$this->prevues->contains($prevue)) {
+            $this->prevues->add($prevue);
+            $prevue->setMensualite($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrevue(Prevues $prevue): static
+    {
+        if ($this->prevues->removeElement($prevue)) {
+            // set the owning side to null (unless already changed)
+            if ($prevue->getMensualite() === $this) {
+                $prevue->setMensualite(null);
+            }
+        }
 
         return $this;
     }

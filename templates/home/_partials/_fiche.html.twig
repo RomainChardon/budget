@@ -1,0 +1,35 @@
+<table>
+    <h1>Dépense</h1>
+    <tr>
+        <th></th>
+        <th>Prévu</th>
+        <th>Réel</th>
+        <th>Diff.</th>
+    </tr>
+    {% for key, detail in depense %}
+        <tr>
+            <th>{{ key }}</th>
+            <td>{{ detail.prevu.totalMontant }}</td>
+            <td>{{ detail.reel.totalMontant }}</td>
+            <td>{{ detail.diff.totalMontant }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<table>
+    <h1>Revenu</h1>
+    <tr>
+        <th></th>
+        <th>Prévu</th>
+        <th>Réel</th>
+        <th>Diff.</th>
+    </tr>
+    {% for key, detail in revenu %}
+        <tr>
+            <th>{{ key }}</th>
+            <td>{{ detail.prevu.totalMontant }}</td>
+            <td>{{ detail.reel.totalMontant }}</td>
+            <td>{{ detail.diff.totalMontant }}</td>
+        </tr>
+    {% endfor %}
+</table>

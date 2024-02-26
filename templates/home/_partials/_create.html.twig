@@ -1,0 +1,18 @@
+<h3>Creer une fiche</h3>
+
+{{ form_start(formMensualite) }}
+    {{ form_widget(formMensualite) }}
+
+    <h2>Prévue</h2>
+    {% for depense in categorieDepense %}
+        <label>{{ depense.name }}</label>
+        <input id="revenu{{ depense.name }}" name="depense[{{ depense.id }}]" value="">
+    {% endfor %}
+
+    {% for revenu in categorieRevenu %}
+        <label>{{ revenu.name }}</label>
+        <input id="revenu{{ revenu.name }}" name="revenu[{{ revenu.id }}]" value="">
+    {% endfor %}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(formMensualite) }}

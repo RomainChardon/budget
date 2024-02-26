@@ -22,6 +22,15 @@ class MensualiteController extends AbstractController
         ]);
     }
 
+    #[Route('/close/{id}', name: 'app_close_fiche', methods: ['GET'])]
+    public function closeFiche(Mensualite $mensualite, EntityManagerInterface $entityManager): Response
+    {
+        $mensualite->setActif(0);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/new', name: 'app_mensualite_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

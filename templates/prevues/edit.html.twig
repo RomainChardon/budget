@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Prevues{% endblock %}
+
+{% block body %}
+    <h1>Edit Prevues</h1>
+
+    {{ include('prevues/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_prevues_index') }}">back to list</a>
+
+    {{ include('prevues/_delete_form.html.twig') }}
+{% endblock %}

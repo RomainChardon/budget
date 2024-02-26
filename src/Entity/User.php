@@ -41,11 +41,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Mensualite::class, mappedBy: 'user')]
     private Collection $mensualites;
 
+    #[ORM\OneToMany(targetEntity: Prevues::class, mappedBy: 'user')]
+    private Collection $prevues;
+
     public function __construct()
     {
         $this->categorieDepenses = new ArrayCollection();
         $this->categorieRevenus = new ArrayCollection();
         $this->mensualites = new ArrayCollection();
+        $this->prevues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,6 +211,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($mensualite->getUser() === $this) {
                 $mensualite->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Prevues>
+     */
+    public function getPrevues(): Collection
+    {
+        return $this->prevues;
+    }
+
+    public function addPrevue(Prevues $prevue): static
+    {
+        if (!$this->prevues->contains($prevue)) {
+            $this->prevues->add($prevue);
+            $prevue->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrevue(Prevues $prevue): static
+    {
+        if ($this->prevues->removeElement($prevue)) {
+            // set the owning side to null (unless already changed)
+            if ($prevue->getUser() === $this) {
+                $prevue->setUser(null);
             }
         }
 

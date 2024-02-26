@@ -2,27 +2,33 @@
 
 namespace App\Form;
 
+use App\Entity\CategorieDepense;
+use App\Entity\Depense;
 use App\Entity\Mensualite;
-use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class MensualiteType extends AbstractType
+class DepenseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
-            ->add('soldeDepart')
+            ->add('titre')
+            ->add('date')
+            ->add('montant')
+            ->add('categorie', EntityType::class, [
+                'class' => CategorieDepense::class,
+'choice_label' => 'name',
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Mensualite::class,
+            'data_class' => Depense::class,
         ]);
     }
 }

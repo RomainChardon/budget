@@ -24,9 +24,13 @@ class CategorieDepense
     #[ORM\OneToMany(targetEntity: Depense::class, mappedBy: 'categorie')]
     private Collection $depenses;
 
+    #[ORM\OneToMany(targetEntity: Prevues::class, mappedBy: 'categorie')]
+    private Collection $prevues;
+
     public function __construct()
     {
         $this->depenses = new ArrayCollection();
+        $this->prevues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,6 +86,36 @@ class CategorieDepense
             // set the owning side to null (unless already changed)
             if ($depense->getCategorie() === $this) {
                 $depense->setCategorie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Prevues>
+     */
+    public function getPrevues(): Collection
+    {
+        return $this->prevues;
+    }
+
+    public function addPrevue(Prevues $prevue): static
+    {
+        if (!$this->prevues->contains($prevue)) {
+            $this->prevues->add($prevue);
+            $prevue->setCategorie($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrevue(Prevues $prevue): static
+    {
+        if ($this->prevues->removeElement($prevue)) {
+            // set the owning side to null (unless already changed)
+            if ($prevue->getCategorie() === $this) {
+                $prevue->setCategorie(null);
             }
         }
 

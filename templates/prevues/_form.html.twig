@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+
+    <select id="selectDepense" name="selectDepense">
+        <option value="">---</option>
+        {% for categorie in categorieDepense %}
+            <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+        {% endfor %}
+    </select>
+
+    <select id="selectRevenu" name="selectRevenu">
+        <option value="">---</option>
+        {% for categorie in categorieRevenu %}
+            <option value="{{ categorie.id }}">{{ categorie.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

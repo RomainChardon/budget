@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Prevues{% endblock %}
+
+{% block body %}
+    <h1>Create new Prevues</h1>
+
+    {{ include('prevues/_form.html.twig') }}
+
+    <a href="{{ path('app_prevues_index') }}">back to list</a>
+{% endblock %}
