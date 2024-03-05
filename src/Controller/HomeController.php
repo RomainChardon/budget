@@ -52,7 +52,7 @@ class HomeController extends AbstractController
         $chartPrevuRevenu = $chartBuilder->createChart(Chart::TYPE_BAR);
         $chartDepense = $chartBuilder->createChart(Chart::TYPE_PIE);
         $chartSolde = $chartBuilder->createChart(Chart::TYPE_BAR);
-        
+
 
         if ($nbFiche == 1) {
 
