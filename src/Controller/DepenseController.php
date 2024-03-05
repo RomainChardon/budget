@@ -28,7 +28,7 @@ class DepenseController extends AbstractController
             $entityManager->persist($depense);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_depense_index', ['id' => $mensualite], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('depense/index.html.twig', [

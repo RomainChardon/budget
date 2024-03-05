@@ -28,7 +28,7 @@ class RevenuController extends AbstractController
             $entityManager->persist($revenu);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_revenu_index', ['id' => $mensualite], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('revenu/index.html.twig', [
