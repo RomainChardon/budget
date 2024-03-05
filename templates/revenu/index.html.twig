@@ -4,10 +4,11 @@
 
 {% block body %}
     <div class="chart-container">
-        {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn">{{ button_label|default('Save') }}</button>
-        {{ form_end(form) }}
+{#        {{ form_start(form) }}#}
+{#        {{ form_widget(form) }}#}
+{#        <button class="btn">{{ button_label|default('Save') }}</button>#}
+{#        {{ form_end(form) }}#}
+        <a href="{{ path('app_revenu_new', {'id': fiche.id}) }}">New</a>
     </div>
 
     <div class="chart-detail" style="padding: 0 15px;">

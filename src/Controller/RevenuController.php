@@ -32,7 +32,8 @@ class RevenuController extends AbstractController
         }
 
         return $this->render('revenu/index.html.twig', [
-            'revenus' => $revenuRepository->findAll(),
+            'revenus' => $revenuRepository->findBy(['mensualite' => $mensualite]),
+            'fiche' => $mensualite,
             'revenu' => $revenu,
             'form' => $form,
         ]);
@@ -60,7 +61,7 @@ class RevenuController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_revenu_show', methods: ['GET'])]
+    #[Route('/show/{id}', name: 'app_revenu_show', methods: ['GET'])]
     public function show(Revenu $revenu): Response
     {
         return $this->render('revenu/show.html.twig', [
@@ -68,7 +69,7 @@ class RevenuController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_revenu_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'app_revenu_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Revenu $revenu, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(RevenuType::class, $revenu);
@@ -86,7 +87,7 @@ class RevenuController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_revenu_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_revenu_delete', methods: ['POST'])]
     public function delete(Request $request, Revenu $revenu, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$revenu->getId(), $request->request->get('_token'))) {

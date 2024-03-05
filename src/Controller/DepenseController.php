@@ -28,11 +28,12 @@ class DepenseController extends AbstractController
             $entityManager->persist($depense);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_depense_index', ['id' => $mensualite], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('depense/index.html.twig', [
             'depenses' => $depenseRepository->findBy(['mensualite' => $mensualite]),
+            'fiche' => $mensualite,
             'depense' => $depense,
             'form' => $form,
         ]);
@@ -60,7 +61,7 @@ class DepenseController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_depense_show', methods: ['GET'])]
+    #[Route('/show/{id}', name: 'app_depense_show', methods: ['GET'])]
     public function show(Depense $depense): Response
     {
         return $this->render('depense/show.html.twig', [
@@ -68,7 +69,7 @@ class DepenseController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_depense_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'app_depense_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Depense $depense, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(DepenseType::class, $depense);
@@ -86,7 +87,7 @@ class DepenseController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_depense_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_depense_delete', methods: ['POST'])]
     public function delete(Request $request, Depense $depense, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$depense->getId(), $request->request->get('_token'))) {
