@@ -37,7 +37,7 @@ class HomeController extends AbstractController
         if (count($ficheActif) == 1) {
             $fiche = $ficheActif[0];
             $nbFiche = 1;
-        } elseif (count($ficheActif) > 1) {
+        } else {
             $fiche = $ficheActif;
             $nbFiche = count($fiche);
         }
