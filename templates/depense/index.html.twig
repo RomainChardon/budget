@@ -3,37 +3,39 @@
 {% block title %}Depense index{% endblock %}
 
 {% block body %}
-    <h1>Depense index</h1>
+<div class="chart-container">
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+</div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Date</th>
-                <th>Montant</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for depense in depenses %}
-            <tr>
-                <td>{{ depense.id }}</td>
-                <td>{{ depense.titre }}</td>
-                <td>{{ depense.date ? depense.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ depense.montant }}</td>
-                <td>
-                    <a href="{{ path('app_depense_show', {'id': depense.id}) }}">show</a>
-                    <a href="{{ path('app_depense_edit', {'id': depense.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_depense_new') }}">Create new</a>
+    <div class="chart-detail" style="padding: 0 15px;">
+        <table class="table" style="font-size: 0.9rem;">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Date</th>
+                    <th>Montant</th>
+                    <th>Categorie</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for d in depenses %}
+                <tr>
+                    <td>{{ d.titre }}</td>
+                    <td>{{ d.date ? d.date|date('d/m/Y') : '' }}</td>
+                    <td>{{ d.montant }}</td>
+                    <td>{{ d.categorie.name }}</td>
+                    <td>
+                        <a href="{{ path('app_depense_edit', {'id': d.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

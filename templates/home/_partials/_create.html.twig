@@ -1,18 +1,49 @@
-<h3>Creer une fiche</h3>
-
 {{ form_start(formMensualite) }}
-    {{ form_widget(formMensualite) }}
+<div class="chart-container">
+    <div class="chart-header">
+        <h1>Création d'une fiche</h1>
+    </div>
+    <div class="chart-detail">
+        <div class="input">
+            <label>Nom : </label>
+            {{ form_widget(formMensualite.nom) }}
+        </div>
 
-    <h2>Prévue</h2>
-    {% for depense in categorieDepense %}
-        <label>{{ depense.name }}</label>
-        <input id="revenu{{ depense.name }}" name="depense[{{ depense.id }}]" value="">
-    {% endfor %}
+        <div class="input">
+            <label>Solde de depart : </label>
+            {{ form_widget(formMensualite.soldeDepart) }}
+        </div>
+    </div>
+</div>
 
-    {% for revenu in categorieRevenu %}
-        <label>{{ revenu.name }}</label>
-        <input id="revenu{{ revenu.name }}" name="revenu[{{ revenu.id }}]" value="">
-    {% endfor %}
+<div class="chart-container">
+    <div class="chart-header">
+        <h2>Dépense Prévu</h2>
+    </div>
+    <div class="chart-detail">
+        {% for depense in categoriePrevu.depense %}
+        <div class="input">
+            <label>{{ depense.categorie.name }} : </label>
+            <input type="number" id="revenu{{ depense.categorie.name }}" name="depense[{{ depense.categorie.id }}]" value="{{ depense.last.montant }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-    <button class="btn">{{ button_label|default('Save') }}</button>
+<div class="chart-container">
+    <div class="chart-header">
+        <h2>Revenu Prévu</h2>
+    </div>
+    <div class="chart-detail">
+        {% for revenu in categoriePrevu.revenu %}
+        <div class="input">
+            <label>{{ revenu.categorie.name }} : </label>
+            <input type="number" id="revenu{{ revenu.categorie.name }}" name="revenu[{{ revenu.categorie.id }}]" value="{{ revenu.last.montant }}">
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<button class="btn" style="background: #04aa6d">{{ button_label|default('Save') }}</button>
+
 {{ form_end(formMensualite) }}
+

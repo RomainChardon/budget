@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\CategorieDepense;
 use App\Entity\Depense;
-use App\Entity\Mensualite;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,7 +15,9 @@ class DepenseType extends AbstractType
     {
         $builder
             ->add('titre')
-            ->add('date')
+            ->add('date', \Symfony\Component\Form\Extension\Core\Type\DateType::class ,[
+                'data' => new \DateTime(),
+            ])
             ->add('montant')
             ->add('categorie', EntityType::class, [
                 'class' => CategorieDepense::class,

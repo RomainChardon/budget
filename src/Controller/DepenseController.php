@@ -15,11 +15,26 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/depense')]
 class DepenseController extends AbstractController
 {
-    #[Route('/', name: 'app_depense_index', methods: ['GET'])]
-    public function index(DepenseRepository $depenseRepository): Response
+    #[Route('/{id}', name: 'app_depense_index', methods: ['GET'])]
+    public function index(Mensualite $mensualite, DepenseRepository $depenseRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $depense = new Depense();
+        $form = $this->createForm(DepenseType::class, $depense);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $depense->setMensualite($mensualite);
+
+            $entityManager->persist($depense);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        }
+
         return $this->render('depense/index.html.twig', [
-            'depenses' => $depenseRepository->findAll(),
+            'depenses' => $depenseRepository->findBy(['mensualite' => $mensualite]),
+            'depense' => $depense,
+            'form' => $form,
         ]);
     }
 

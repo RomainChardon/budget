@@ -3,37 +3,39 @@
 {% block title %}Revenu index{% endblock %}
 
 {% block body %}
-    <h1>Revenu index</h1>
+    <div class="chart-container">
+        {{ form_widget(form) }}
+        <button class="btn">{{ button_label|default('Save') }}</button>
+    </div>
 
-    <table class="table">
-        <thead>
+    <div class="chart-detail" style="padding: 0 15px;">
+        <table class="table" style="font-size: 0.9rem;">
+            <thead>
             <tr>
-                <th>Id</th>
                 <th>Titre</th>
                 <th>Date</th>
                 <th>Montant</th>
-                <th>actions</th>
+                <th>Categorie</th>
+                <th></th>
             </tr>
-        </thead>
-        <tbody>
-        {% for revenu in revenus %}
-            <tr>
-                <td>{{ revenu.id }}</td>
-                <td>{{ revenu.titre }}</td>
-                <td>{{ revenu.date ? revenu.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ revenu.montant }}</td>
-                <td>
-                    <a href="{{ path('app_revenu_show', {'id': revenu.id}) }}">show</a>
-                    <a href="{{ path('app_revenu_edit', {'id': revenu.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_revenu_new') }}">Create new</a>
+            </thead>
+            <tbody>
+            {% for r in revenus %}
+                <tr>
+                    <td>{{ r.titre }}</td>
+                    <td>{{ r.date ? r.date|date('d/m/Y') : '' }}</td>
+                    <td>{{ r.montant }}</td>
+                    <td>{{ r.categorie.name }}</td>
+                    <td>
+                        <a href="{{ path('app_revenu_edit', {'id': r.id}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

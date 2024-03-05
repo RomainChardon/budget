@@ -17,6 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 class HomeController extends AbstractController
 {
@@ -24,7 +26,7 @@ class HomeController extends AbstractController
     public function index(MensualiteRepository $mensualiteRepository, DepenseRepository $depenseRepository,
                           RevenuRepository $revenuRepository, CategorieDepenseRepository $categorieDepenseRepository,
                           CategorieRevenuRepository $categorieRevenuRepository, PrevuesRepository $prevuesRepository,
-                          Request $request, EntityManagerInterface $entityManager): Response
+                          Request $request, EntityManagerInterface $entityManager, ChartBuilderInterface $chartBuilder): Response
     {
         $user = $this->getUser();
 
@@ -42,16 +44,21 @@ class HomeController extends AbstractController
 
         $depense = [];
         $revenu = [];
+
+        $labelDepense = [];
+        $statDepense = [];
         if ($nbFiche == 1) {
 
             /* TOUTES LES DEPENSE ET REVENU */
             foreach ($categorieDepenseRepository->findBy(['User' => $user]) as $categoriDepense) {
+                array_push($labelDepense, $categoriDepense->getName());
                 $depenseAll = $depenseRepository->findBy(['mensualite' => $fiche->getId(), 'categorie' => $categoriDepense->getId()]);
                 $prevuAll = $prevuesRepository->findBy(['mensualite' => $fiche->getId(), 'categorie' => $categoriDepense->getId()]);
 
                 $totalMontant = 0;
                 $totalPrevu = 0;
                 foreach ($depenseAll as $d) {
+                    array_push($statDepense, $d->getMontant());
                     $totalMontant = $totalMontant + $d->getMontant();
                 }
 
@@ -76,10 +83,162 @@ class HomeController extends AbstractController
                     $totalPrevu = $totalPrevu + $p->getMontant();
                 }
 
-                $revenu[$categoriRevenu->getName()] =  ['reel' => ['detail' => $revenuAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalPrevu - $totalMontant]];
+                $revenu[$categoriRevenu->getName()] =  ['reel' => ['detail' => $revenuAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalMontant - $totalPrevu]];
 
             }
         }
+
+        /* CHART JS */
+
+        $chartPrevuDepense = $chartBuilder->createChart(Chart::TYPE_BAR);
+
+        $ttPrevu = 0;
+        $ttReel = 0;
+
+        foreach ($depense as $d) {
+            $ttPrevu = $ttPrevu + $d['prevu']['totalMontant'];
+        }
+
+        foreach ($depense as $d) {
+            $ttReel = $ttReel + $d['reel']['totalMontant'];
+        }
+
+        $chartPrevuDepense->setData([
+            'labels' => ['Prévue', 'Réel'],
+            'datasets' => [
+                [
+                    'backgroundColor' => [
+                            'rgb(255, 159, 64)',
+                            'rgb(153, 102, 255)',
+                        ],
+                    'data' => [
+                        $ttPrevu,
+                        $ttReel
+                    ]
+                ],
+            ],
+        ]);
+
+        $chartPrevuDepense->setOptions([
+            'plugins' => [
+                'legend' => false
+            ],
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                ],
+            ],
+        ]);
+
+        $chartPrevuRevenu = $chartBuilder->createChart(Chart::TYPE_BAR);
+
+        $ttPrevu = 0;
+        $ttReel = 0;
+
+        foreach ($revenu as $d) {
+            $ttPrevu = $ttPrevu + $d['prevu']['totalMontant'];
+        }
+
+        foreach ($revenu as $d) {
+            $ttReel = $ttReel + $d['reel']['totalMontant'];
+        }
+
+        $chartPrevuRevenu->setData([
+            'labels' => ['Prévue', 'Réel'],
+            'datasets' => [
+                [
+                    'backgroundColor' => [
+                        'rgb(201, 203, 207)',
+                        'rgb(255, 205, 86)',
+                    ],
+                    'data' => [
+                        $ttPrevu,
+                        $ttReel
+                    ]
+                ],
+            ],
+        ]);
+
+        $chartPrevuRevenu->setOptions([
+            'plugins' => [
+                'legend' => false
+            ],
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                ],
+            ],
+        ]);
+
+        $chartDepense = $chartBuilder->createChart(Chart::TYPE_PIE);
+
+        $chartDepense->setData([
+            'labels' => $labelDepense,
+            'datasets' => [
+                [
+                    'label' => 'My First dataset',
+                    'backgroundColor' => [
+                        'rgb(54, 162, 235)',
+                        'rgb(255, 99, 132)',
+                        'rgb(75, 192, 192)',
+                        'rgb(255, 159, 64)',
+                        'rgb(153, 102, 255)',
+                        'rgb(255, 205, 86)',
+                        'rgb(201, 203, 207)',
+                    ],
+                    'data' => $statDepense
+                ],
+            ],
+        ]);
+
+        $chartDepense->setOptions([
+            'plugins' => [
+                'legend' => false
+            ],
+        ]);
+
+        $chartSolde = $chartBuilder->createChart(Chart::TYPE_BAR);
+
+        $ttDepense = 0;
+        $ttRevenu = 0;
+
+        foreach ($depense as $d) {
+            $ttDepense = $ttDepense + $d['reel']['totalMontant'];
+        }
+
+        foreach ($revenu as $r) {
+            $ttRevenu = $ttRevenu + $r['reel']['totalMontant'];
+        }
+
+        $chartSolde->setData([
+            'labels' => ['Solde départ', 'Solde actuel'],
+            'datasets' => [
+                [
+                    'backgroundColor' => [
+                        'rgb(177, 4, 15)',
+                        'rgb(30, 215, 96)',
+                    ],
+                    'data' => [
+                        $fiche->getSoldeDepart(),
+                        $fiche->getSoldeDepart() + ($ttRevenu - $ttDepense),
+                    ]
+                ],
+            ],
+        ]);
+
+        $chartSolde->setOptions([
+            'responsive' => true,
+            'maintainAspectRatio' => false,
+            'plugins' => [
+                'legend' => false
+            ],
+            'scales' => [
+                'y' => [
+                    'suggestedMin' => 0,
+                    'suggestedMax' => $fiche->getSoldeDepart(),
+                ],
+            ],
+        ]);
 
         /* CREATION FICHE */
 
@@ -123,6 +282,23 @@ class HomeController extends AbstractController
             return $this->redirectToRoute('app_home', ['id' => $mensualite->getId()], Response::HTTP_SEE_OTHER);
         }
 
+        $lastPrevuDepense = $categorieDepenseRepository->findBy(['User' => $user]);
+        $lastPrevuRevenu = $categorieRevenuRepository->findBy(['User' => $user]);
+
+        $categoriePrevu = [
+            'depense' => [],
+            'revenu' => []
+        ];
+        foreach ($lastPrevuDepense as $d) {
+            $nb = count($d->getPrevues()->toArray());
+            array_push($categoriePrevu['depense'], ['categorie' => $d, 'last' => $d->getPrevues()->toArray()[$nb - 1]]);
+        }
+
+        foreach ($lastPrevuRevenu as $r) {
+            $nb = count($r->getPrevues()->toArray());
+            array_push($categoriePrevu['revenu'], ['categorie' => $r, 'last' => $r->getPrevues()->toArray()[$nb - 1]]);
+        }
+
 
         return $this->render('home/index.html.twig', [
             'nbFicheActive' => $nbFiche,
@@ -133,8 +309,12 @@ class HomeController extends AbstractController
             'formMensualite' => $formMensualite,
             'mensualite' => $mensualite,
 
-            'categorieDepense' => $categorieDepenseRepository->findBy(['User' => $user]),
-            'categorieRevenu' => $categorieRevenuRepository->findBy(['User' => $user]),
+            'categoriePrevu' => $categoriePrevu,
+
+            'chartPrevuDepense' => $chartPrevuDepense,
+            'chartPrevuRevenu' => $chartPrevuRevenu,
+            'chartDepense' => $chartDepense,
+            'chartSolde' => $chartSolde,
         ]);
     }
 }

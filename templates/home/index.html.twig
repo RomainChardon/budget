@@ -3,20 +3,14 @@
 {% block title %}Hello HomeController!{% endblock %}
 
 {% block body %}
-    {{ dump(fiche) }}
 
-    {% if nbFicheActive == 1 %}
-        {% include './home/_partials/_fiche.html.twig' %}
-    {% elseif nbFicheActive > 1 %}
+        {% if nbFicheActive == 1 %}
+            {% include './home/_partials/_fiche.html.twig' %}
+        {% elseif nbFicheActive > 1 %}
 
-    {% else %}
-        {% include './home/_partials/_create.html.twig' %}
-    {% endif %}
+        {% else %}
+            {% include './home/_partials/_create.html.twig' %}
+        {% endif %}
 
 
-    {% if nbFicheActive == 1 %}
-        <a href="{{ path('app_depense_new', {'id': fiche.id}) }}">Ajout depense</a>
-        <a href="{{ path('app_revenu_new', {'id': fiche.id}) }}">Ajout revenu</a>
-        <a href="{{ path('app_close_fiche', {'id': fiche.id}) }}">close fiche</a>
-    {% endif %}
 {% endblock %}

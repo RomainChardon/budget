@@ -1,35 +1,92 @@
-<table>
-    <h1>Dépense</h1>
-    <tr>
-        <th></th>
-        <th>Prévu</th>
-        <th>Réel</th>
-        <th>Diff.</th>
-    </tr>
-    {% for key, detail in depense %}
-        <tr>
-            <th>{{ key }}</th>
-            <td>{{ detail.prevu.totalMontant }}</td>
-            <td>{{ detail.reel.totalMontant }}</td>
-            <td>{{ detail.diff.totalMontant }}</td>
-        </tr>
-    {% endfor %}
-</table>
+<div class="chart-categorie">
+    <div class="chart-row">{{ render_chart(chartSolde) }}</div>
+    <div class="chart-row">{{ render_chart(chartDepense) }}</div>
+</div>
 
-<table>
-    <h1>Revenu</h1>
-    <tr>
-        <th></th>
-        <th>Prévu</th>
-        <th>Réel</th>
-        <th>Diff.</th>
-    </tr>
-    {% for key, detail in revenu %}
-        <tr>
-            <th>{{ key }}</th>
-            <td>{{ detail.prevu.totalMontant }}</td>
-            <td>{{ detail.reel.totalMontant }}</td>
-            <td>{{ detail.diff.totalMontant }}</td>
-        </tr>
-    {% endfor %}
-</table>
+<div class="chart-container">
+    <div class="chart-header">
+        <h1>Dépense</h1>
+        <a href="{{ path('app_depense_index', {'id': fiche.id}) }}" class="btn" style="background: #04aa6d; margin: 0">Liste</a>
+
+    </div>
+    <div class="chart-detail">
+        <table>
+            <tr>
+                <th></th>
+                <th>Prévu</th>
+                <th>Réel</th>
+                <th>Diff.</th>
+            </tr>
+            {% set totalPrevuDepense = 0 %}
+            {% set totalReelDepense = 0 %}
+            {% for key, detail in depense %}
+                <tr>
+                    <th>{{ key }}</th>
+                    <td>{{ detail.prevu.totalMontant }}</td>
+                    {% if detail.prevu.totalMontant > detail.reel.totalMontant %}
+                        <td class="chiffreSup">{{ detail.reel.totalMontant }}</td>
+                    {% else %}
+                        <td class="chiffreInf">{{ detail.reel.totalMontant }}</td>
+                    {% endif %}
+                    <td >{{ detail.diff.totalMontant }}</td>
+                </tr>
+                {% set totalPrevuDepense = totalPrevuDepense + detail.prevu.totalMontant %}
+                {% set totalReelDepense = totalReelDepense + detail.reel.totalMontant %}
+            {% endfor %}
+            <tr style="font-weight: bold;">
+                <th>Total</th>
+                <td>{{ totalPrevuDepense }}</td>
+                <td>{{ totalReelDepense }}</td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="chart-depense">
+            {{ render_chart(chartPrevuDepense) }}
+        </div>
+    </div>
+</div>
+
+<div class="chart-container">
+    <div class="chart-header">
+        <h1>Revenu</h1>
+        <a href="{{ path('app_revenu_index', {'id': fiche.id}) }}" class="btn" style="background: #04aa6d; margin: 0">Liste</a>
+
+    </div>
+    <div class="chart-detail">
+        <table>
+            <tr>
+                <th></th>
+                <th>Prévu</th>
+                <th>Réel</th>
+                <th>Diff.</th>
+            </tr>
+            {% set totalPrevuRevenu = 0 %}
+            {% set totalReelRevenu = 0 %}
+            {% for key, detail in revenu %}
+                <tr>
+                    <th>{{ key }}</th>
+                    <td>{{ detail.prevu.totalMontant }}</td>
+                    {% if detail.prevu.totalMontant < detail.reel.totalMontant %}
+                        <td class="chiffreSup">{{ detail.reel.totalMontant }}</td>
+                    {% else %}
+                        <td class="chiffreInf">{{ detail.reel.totalMontant }}</td>
+                    {% endif %}
+                    <td>{{ detail.diff.totalMontant }}</td>
+                </tr>
+                {% set totalPrevuRevenu = totalPrevuRevenu + detail.prevu.totalMontant %}
+                {% set totalReelRevenu = totalReelRevenu + detail.reel.totalMontant %}
+            {% endfor %}
+            <tr style="font-weight: bold;">
+                <th>Total</th>
+                <td>{{ totalPrevuRevenu }}</td>
+                <td>{{ totalReelRevenu }}</td>
+                <td></td>
+            </tr>
+        </table>
+        <div class="chart-depense">
+            {{ render_chart(chartPrevuRevenu) }}
+        </div>
+    </div>
+</div>
+
+<a href="{{ path('app_close_fiche', {'id': fiche.id}) }}" class="btn" style="background: #d11212; text-align: center" onclick="return confirm('Voulez-vous vraiment cloturer la fiche ?')">Fermer la fiche</a>

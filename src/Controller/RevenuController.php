@@ -15,11 +15,26 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/revenu')]
 class RevenuController extends AbstractController
 {
-    #[Route('/', name: 'app_revenu_index', methods: ['GET'])]
-    public function index(RevenuRepository $revenuRepository): Response
+    #[Route('/{id}', name: 'app_revenu_index', methods: ['GET'])]
+    public function index(Mensualite $mensualite, RevenuRepository $revenuRepository, Request $request, EntityManagerInterface $entityManager): Response
     {
+        $revenu = new Revenu();
+        $form = $this->createForm(RevenuType::class, $revenu);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $revenu->setMensualite($mensualite);
+
+            $entityManager->persist($revenu);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
+        }
+
         return $this->render('revenu/index.html.twig', [
             'revenus' => $revenuRepository->findAll(),
+            'revenu' => $revenu,
+            'form' => $form,
         ]);
     }
 

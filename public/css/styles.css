@@ -10,8 +10,11 @@ html, body {
 }
 
 .main{
-    height: 100%;
-    background: #0022f1;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 20px;
 }
 
 .sidebar{
@@ -27,10 +30,26 @@ html, body {
     color: #fff;
 }
 
+
+input, button {
+    color: #000;
+}
+
+.btn {
+    float: right;
+    border: 2px solid #1f1e25;
+    border-radius: 20px;
+    margin: 0 30px;
+    padding: 5px 15px;
+    font-weight: bold;
+    color: #000;
+    text-decoration: none;
+}
+
 /* Config */
 
 .categorie-container {
-border: 1px solid #ccc;
+    border: 1px solid #ccc;
 }
 
 .categorie-head {
@@ -52,6 +71,94 @@ border: 1px solid #ccc;
     justify-content: space-between;
     padding: 5px 15px;
     background: #0c0c0d;
+}
+
+/* MAIN PAGE */
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #1f1e25;
+    border-radius: 20px;
+    margin: 10px 10px;
+    padding: 5px 15px;
+}
+
+.chart-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+}
+
+.chart-detail {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    padding: 5px;
+}
+
+.chart-depense {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.chart-categorie {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin: 10px 10px;
+    padding: 5px 5px;
+}
+
+.chart-row {
+    width: 50%;
+}
+
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table td, table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+table tr:nth-child(even){
+    background-color: #151313;
+}
+
+table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+}
+
+.chiffreSup {
+    color: #04aa6d;
+    font-weight: bold;
+}
+
+.chiffreInf {
+    color: #d11212;
+    font-weight: bold;
+}
+
+/* CREATE */
+
+.input {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 20px;
 }
 
 /* MOBILE */

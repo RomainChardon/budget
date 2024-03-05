@@ -16,7 +16,9 @@ class RevenuType extends AbstractType
     {
         $builder
             ->add('titre')
-            ->add('date')
+            ->add('date', \Symfony\Component\Form\Extension\Core\Type\DateType::class ,[
+                'data' => new \DateTime(),
+            ])
             ->add('montant')
             ->add('categorie', EntityType::class, [
                 'class' => CategorieRevenu::class,
