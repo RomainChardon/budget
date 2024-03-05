@@ -37,7 +37,7 @@ class HomeController extends AbstractController
         if (count($ficheActif) == 1) {
             $fiche = $ficheActif[0];
             $nbFiche = 1;
-        } else {
+        } elseif (count($ficheActif) > 1) {
             $fiche = $ficheActif;
             $nbFiche = count($fiche);
         }
@@ -47,6 +47,13 @@ class HomeController extends AbstractController
 
         $labelDepense = [];
         $statDepense = [];
+
+        $chartPrevuDepense = $chartBuilder->createChart(Chart::TYPE_BAR);
+        $chartPrevuRevenu = $chartBuilder->createChart(Chart::TYPE_BAR);
+        $chartDepense = $chartBuilder->createChart(Chart::TYPE_PIE);
+        $chartSolde = $chartBuilder->createChart(Chart::TYPE_BAR);
+        
+
         if ($nbFiche == 1) {
 
             /* TOUTES LES DEPENSE ET REVENU */
@@ -66,7 +73,7 @@ class HomeController extends AbstractController
                     $totalPrevu = $totalPrevu + $p->getMontant();
                 }
 
-                $depense[$categoriDepense->getName()] = ['reel' => ['detail' => $depenseAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalPrevu - $totalMontant]];
+                $depense[$categoriDepense->getName()] =  ['reel' => ['detail' => $depenseAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalPrevu - $totalMontant]];
             }
 
             foreach ($categorieRevenuRepository->findBy(['User' => $user]) as $categoriRevenu) {
@@ -83,14 +90,12 @@ class HomeController extends AbstractController
                     $totalPrevu = $totalPrevu + $p->getMontant();
                 }
 
-                $revenu[$categoriRevenu->getName()] = ['reel' => ['detail' => $revenuAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalMontant - $totalPrevu]];
+                $revenu[$categoriRevenu->getName()] =  ['reel' => ['detail' => $revenuAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalMontant - $totalPrevu]];
 
             }
 
-
             /* CHART JS */
 
-            $chartPrevuDepense = $chartBuilder->createChart(Chart::TYPE_BAR);
 
             $ttPrevu = 0;
             $ttReel = 0;
@@ -130,8 +135,6 @@ class HomeController extends AbstractController
                 ],
             ]);
 
-            $chartPrevuRevenu = $chartBuilder->createChart(Chart::TYPE_BAR);
-
             $ttPrevu = 0;
             $ttReel = 0;
 
@@ -170,7 +173,6 @@ class HomeController extends AbstractController
                 ],
             ]);
 
-            $chartDepense = $chartBuilder->createChart(Chart::TYPE_PIE);
 
             $chartDepense->setData([
                 'labels' => $labelDepense,
@@ -197,7 +199,6 @@ class HomeController extends AbstractController
                 ],
             ]);
 
-            $chartSolde = $chartBuilder->createChart(Chart::TYPE_BAR);
 
             $ttDepense = 0;
             $ttRevenu = 0;
@@ -239,28 +240,9 @@ class HomeController extends AbstractController
                     ],
                 ],
             ]);
-
         }
-
 
         /* CREATION FICHE */
-
-        $lastPrevuDepense = $categorieDepenseRepository->findBy(['User' => $user]);
-        $lastPrevuRevenu = $categorieRevenuRepository->findBy(['User' => $user]);
-
-        $categoriePrevu = [
-            'depense' => [],
-            'revenu' => []
-        ];
-        foreach ($lastPrevuDepense as $d) {
-            $nb = count($d->getPrevues()->toArray());
-            array_push($categoriePrevu['depense'], ['categorie' => $d, 'last' => $d->getPrevues()->toArray()[$nb - 1]]);
-        }
-
-        foreach ($lastPrevuRevenu as $r) {
-            $nb = count($r->getPrevues()->toArray());
-            array_push($categoriePrevu['revenu'], ['categorie' => $r, 'last' => $r->getPrevues()->toArray()[$nb - 1]]);
-        }
 
         $mensualite = new Mensualite();
         $formMensualite = $this->createForm(MensualiteType::class, $mensualite);
@@ -301,6 +283,24 @@ class HomeController extends AbstractController
 
             return $this->redirectToRoute('app_home', ['id' => $mensualite->getId()], Response::HTTP_SEE_OTHER);
         }
+
+        $lastPrevuDepense = $categorieDepenseRepository->findBy(['User' => $user]);
+        $lastPrevuRevenu = $categorieRevenuRepository->findBy(['User' => $user]);
+
+        $categoriePrevu = [
+            'depense' => [],
+            'revenu' => []
+        ];
+        foreach ($lastPrevuDepense as $d) {
+            $nb = count($d->getPrevues()->toArray());
+            array_push($categoriePrevu['depense'], ['categorie' => $d, 'last' => $d->getPrevues()->toArray()[$nb - 1]]);
+        }
+
+        foreach ($lastPrevuRevenu as $r) {
+            $nb = count($r->getPrevues()->toArray());
+            array_push($categoriePrevu['revenu'], ['categorie' => $r, 'last' => $r->getPrevues()->toArray()[$nb - 1]]);
+        }
+
 
         return $this->render('home/index.html.twig', [
             'nbFicheActive' => $nbFiche,
