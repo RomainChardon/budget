@@ -240,27 +240,27 @@ class HomeController extends AbstractController
                 ],
             ]);
 
-            $lastPrevuDepense = $categorieDepenseRepository->findBy(['User' => $user]);
-            $lastPrevuRevenu = $categorieRevenuRepository->findBy(['User' => $user]);
-
-            $categoriePrevu = [
-                'depense' => [],
-                'revenu' => []
-            ];
-            foreach ($lastPrevuDepense as $d) {
-                $nb = count($d->getPrevues()->toArray());
-                array_push($categoriePrevu['depense'], ['categorie' => $d, 'last' => $d->getPrevues()->toArray()[$nb - 1]]);
-            }
-
-            foreach ($lastPrevuRevenu as $r) {
-                $nb = count($r->getPrevues()->toArray());
-                array_push($categoriePrevu['revenu'], ['categorie' => $r, 'last' => $r->getPrevues()->toArray()[$nb - 1]]);
-            }
-
         }
 
 
         /* CREATION FICHE */
+
+        $lastPrevuDepense = $categorieDepenseRepository->findBy(['User' => $user]);
+        $lastPrevuRevenu = $categorieRevenuRepository->findBy(['User' => $user]);
+
+        $categoriePrevu = [
+            'depense' => [],
+            'revenu' => []
+        ];
+        foreach ($lastPrevuDepense as $d) {
+            $nb = count($d->getPrevues()->toArray());
+            array_push($categoriePrevu['depense'], ['categorie' => $d, 'last' => $d->getPrevues()->toArray()[$nb - 1]]);
+        }
+
+        foreach ($lastPrevuRevenu as $r) {
+            $nb = count($r->getPrevues()->toArray());
+            array_push($categoriePrevu['revenu'], ['categorie' => $r, 'last' => $r->getPrevues()->toArray()[$nb - 1]]);
+        }
 
         $mensualite = new Mensualite();
         $formMensualite = $this->createForm(MensualiteType::class, $mensualite);
