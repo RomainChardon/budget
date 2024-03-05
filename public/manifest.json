@@ -1,0 +1,22 @@
+{
+  "short_name": "Budget",
+  "name": "Gestion de budget",
+  "version": "1.0.0",
+  "description": "",
+
+  "icons": [
+    {
+      "src": "../img/logo.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+
+  "start_url": "/",
+  "prefer_related_applications": true,
+
+  "background_color": "#000000",
+
+  "display": "standalone",
+  "theme_color": "#ff0000"
+}
