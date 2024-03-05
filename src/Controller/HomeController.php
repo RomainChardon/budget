@@ -66,7 +66,7 @@ class HomeController extends AbstractController
                     $totalPrevu = $totalPrevu + $p->getMontant();
                 }
 
-                $depense[$categoriDepense->getName()] =  ['reel' => ['detail' => $depenseAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalPrevu - $totalMontant]];
+                $depense[$categoriDepense->getName()] = ['reel' => ['detail' => $depenseAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalPrevu - $totalMontant]];
             }
 
             foreach ($categorieRevenuRepository->findBy(['User' => $user]) as $categoriRevenu) {
@@ -83,162 +83,182 @@ class HomeController extends AbstractController
                     $totalPrevu = $totalPrevu + $p->getMontant();
                 }
 
-                $revenu[$categoriRevenu->getName()] =  ['reel' => ['detail' => $revenuAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalMontant - $totalPrevu]];
+                $revenu[$categoriRevenu->getName()] = ['reel' => ['detail' => $revenuAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalMontant - $totalPrevu]];
 
             }
-        }
 
-        /* CHART JS */
 
-        $chartPrevuDepense = $chartBuilder->createChart(Chart::TYPE_BAR);
+            /* CHART JS */
 
-        $ttPrevu = 0;
-        $ttReel = 0;
+            $chartPrevuDepense = $chartBuilder->createChart(Chart::TYPE_BAR);
 
-        foreach ($depense as $d) {
-            $ttPrevu = $ttPrevu + $d['prevu']['totalMontant'];
-        }
+            $ttPrevu = 0;
+            $ttReel = 0;
 
-        foreach ($depense as $d) {
-            $ttReel = $ttReel + $d['reel']['totalMontant'];
-        }
+            foreach ($depense as $d) {
+                $ttPrevu = $ttPrevu + $d['prevu']['totalMontant'];
+            }
 
-        $chartPrevuDepense->setData([
-            'labels' => ['Prévue', 'Réel'],
-            'datasets' => [
-                [
-                    'backgroundColor' => [
+            foreach ($depense as $d) {
+                $ttReel = $ttReel + $d['reel']['totalMontant'];
+            }
+
+            $chartPrevuDepense->setData([
+                'labels' => ['Prévue', 'Réel'],
+                'datasets' => [
+                    [
+                        'backgroundColor' => [
                             'rgb(255, 159, 64)',
                             'rgb(153, 102, 255)',
                         ],
-                    'data' => [
-                        $ttPrevu,
-                        $ttReel
-                    ]
-                ],
-            ],
-        ]);
-
-        $chartPrevuDepense->setOptions([
-            'plugins' => [
-                'legend' => false
-            ],
-            'scales' => [
-                'y' => [
-                    'suggestedMin' => 0,
-                ],
-            ],
-        ]);
-
-        $chartPrevuRevenu = $chartBuilder->createChart(Chart::TYPE_BAR);
-
-        $ttPrevu = 0;
-        $ttReel = 0;
-
-        foreach ($revenu as $d) {
-            $ttPrevu = $ttPrevu + $d['prevu']['totalMontant'];
-        }
-
-        foreach ($revenu as $d) {
-            $ttReel = $ttReel + $d['reel']['totalMontant'];
-        }
-
-        $chartPrevuRevenu->setData([
-            'labels' => ['Prévue', 'Réel'],
-            'datasets' => [
-                [
-                    'backgroundColor' => [
-                        'rgb(201, 203, 207)',
-                        'rgb(255, 205, 86)',
+                        'data' => [
+                            $ttPrevu,
+                            $ttReel
+                        ]
                     ],
-                    'data' => [
-                        $ttPrevu,
-                        $ttReel
-                    ]
                 ],
-            ],
-        ]);
+            ]);
 
-        $chartPrevuRevenu->setOptions([
-            'plugins' => [
-                'legend' => false
-            ],
-            'scales' => [
-                'y' => [
-                    'suggestedMin' => 0,
+            $chartPrevuDepense->setOptions([
+                'plugins' => [
+                    'legend' => false
                 ],
-            ],
-        ]);
-
-        $chartDepense = $chartBuilder->createChart(Chart::TYPE_PIE);
-
-        $chartDepense->setData([
-            'labels' => $labelDepense,
-            'datasets' => [
-                [
-                    'label' => 'My First dataset',
-                    'backgroundColor' => [
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 99, 132)',
-                        'rgb(75, 192, 192)',
-                        'rgb(255, 159, 64)',
-                        'rgb(153, 102, 255)',
-                        'rgb(255, 205, 86)',
-                        'rgb(201, 203, 207)',
+                'scales' => [
+                    'y' => [
+                        'suggestedMin' => 0,
                     ],
-                    'data' => $statDepense
                 ],
-            ],
-        ]);
+            ]);
 
-        $chartDepense->setOptions([
-            'plugins' => [
-                'legend' => false
-            ],
-        ]);
+            $chartPrevuRevenu = $chartBuilder->createChart(Chart::TYPE_BAR);
 
-        $chartSolde = $chartBuilder->createChart(Chart::TYPE_BAR);
+            $ttPrevu = 0;
+            $ttReel = 0;
 
-        $ttDepense = 0;
-        $ttRevenu = 0;
+            foreach ($revenu as $d) {
+                $ttPrevu = $ttPrevu + $d['prevu']['totalMontant'];
+            }
 
-        foreach ($depense as $d) {
-            $ttDepense = $ttDepense + $d['reel']['totalMontant'];
+            foreach ($revenu as $d) {
+                $ttReel = $ttReel + $d['reel']['totalMontant'];
+            }
+
+            $chartPrevuRevenu->setData([
+                'labels' => ['Prévue', 'Réel'],
+                'datasets' => [
+                    [
+                        'backgroundColor' => [
+                            'rgb(201, 203, 207)',
+                            'rgb(255, 205, 86)',
+                        ],
+                        'data' => [
+                            $ttPrevu,
+                            $ttReel
+                        ]
+                    ],
+                ],
+            ]);
+
+            $chartPrevuRevenu->setOptions([
+                'plugins' => [
+                    'legend' => false
+                ],
+                'scales' => [
+                    'y' => [
+                        'suggestedMin' => 0,
+                    ],
+                ],
+            ]);
+
+            $chartDepense = $chartBuilder->createChart(Chart::TYPE_PIE);
+
+            $chartDepense->setData([
+                'labels' => $labelDepense,
+                'datasets' => [
+                    [
+                        'label' => 'My First dataset',
+                        'backgroundColor' => [
+                            'rgb(54, 162, 235)',
+                            'rgb(255, 99, 132)',
+                            'rgb(75, 192, 192)',
+                            'rgb(255, 159, 64)',
+                            'rgb(153, 102, 255)',
+                            'rgb(255, 205, 86)',
+                            'rgb(201, 203, 207)',
+                        ],
+                        'data' => $statDepense
+                    ],
+                ],
+            ]);
+
+            $chartDepense->setOptions([
+                'plugins' => [
+                    'legend' => false
+                ],
+            ]);
+
+            $chartSolde = $chartBuilder->createChart(Chart::TYPE_BAR);
+
+            $ttDepense = 0;
+            $ttRevenu = 0;
+
+            foreach ($depense as $d) {
+                $ttDepense = $ttDepense + $d['reel']['totalMontant'];
+            }
+
+            foreach ($revenu as $r) {
+                $ttRevenu = $ttRevenu + $r['reel']['totalMontant'];
+            }
+
+            $chartSolde->setData([
+                'labels' => ['Solde départ', 'Solde actuel'],
+                'datasets' => [
+                    [
+                        'backgroundColor' => [
+                            'rgb(177, 4, 15)',
+                            'rgb(30, 215, 96)',
+                        ],
+                        'data' => [
+                            $fiche->getSoldeDepart(),
+                            $fiche->getSoldeDepart() + ($ttRevenu - $ttDepense),
+                        ]
+                    ],
+                ],
+            ]);
+
+            $chartSolde->setOptions([
+                'responsive' => true,
+                'maintainAspectRatio' => false,
+                'plugins' => [
+                    'legend' => false
+                ],
+                'scales' => [
+                    'y' => [
+                        'suggestedMin' => 0,
+                        'suggestedMax' => $fiche->getSoldeDepart(),
+                    ],
+                ],
+            ]);
+
+            $lastPrevuDepense = $categorieDepenseRepository->findBy(['User' => $user]);
+            $lastPrevuRevenu = $categorieRevenuRepository->findBy(['User' => $user]);
+
+            $categoriePrevu = [
+                'depense' => [],
+                'revenu' => []
+            ];
+            foreach ($lastPrevuDepense as $d) {
+                $nb = count($d->getPrevues()->toArray());
+                array_push($categoriePrevu['depense'], ['categorie' => $d, 'last' => $d->getPrevues()->toArray()[$nb - 1]]);
+            }
+
+            foreach ($lastPrevuRevenu as $r) {
+                $nb = count($r->getPrevues()->toArray());
+                array_push($categoriePrevu['revenu'], ['categorie' => $r, 'last' => $r->getPrevues()->toArray()[$nb - 1]]);
+            }
+
         }
 
-        foreach ($revenu as $r) {
-            $ttRevenu = $ttRevenu + $r['reel']['totalMontant'];
-        }
-
-        $chartSolde->setData([
-            'labels' => ['Solde départ', 'Solde actuel'],
-            'datasets' => [
-                [
-                    'backgroundColor' => [
-                        'rgb(177, 4, 15)',
-                        'rgb(30, 215, 96)',
-                    ],
-                    'data' => [
-                        $fiche->getSoldeDepart(),
-                        $fiche->getSoldeDepart() + ($ttRevenu - $ttDepense),
-                    ]
-                ],
-            ],
-        ]);
-
-        $chartSolde->setOptions([
-            'responsive' => true,
-            'maintainAspectRatio' => false,
-            'plugins' => [
-                'legend' => false
-            ],
-            'scales' => [
-                'y' => [
-                    'suggestedMin' => 0,
-                    'suggestedMax' => $fiche->getSoldeDepart(),
-                ],
-            ],
-        ]);
 
         /* CREATION FICHE */
 
@@ -281,24 +301,6 @@ class HomeController extends AbstractController
 
             return $this->redirectToRoute('app_home', ['id' => $mensualite->getId()], Response::HTTP_SEE_OTHER);
         }
-
-        $lastPrevuDepense = $categorieDepenseRepository->findBy(['User' => $user]);
-        $lastPrevuRevenu = $categorieRevenuRepository->findBy(['User' => $user]);
-
-        $categoriePrevu = [
-            'depense' => [],
-            'revenu' => []
-        ];
-        foreach ($lastPrevuDepense as $d) {
-            $nb = count($d->getPrevues()->toArray());
-            array_push($categoriePrevu['depense'], ['categorie' => $d, 'last' => $d->getPrevues()->toArray()[$nb - 1]]);
-        }
-
-        foreach ($lastPrevuRevenu as $r) {
-            $nb = count($r->getPrevues()->toArray());
-            array_push($categoriePrevu['revenu'], ['categorie' => $r, 'last' => $r->getPrevues()->toArray()[$nb - 1]]);
-        }
-
 
         return $this->render('home/index.html.twig', [
             'nbFicheActive' => $nbFiche,
