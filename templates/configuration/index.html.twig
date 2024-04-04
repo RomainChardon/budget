@@ -14,7 +14,10 @@
                 {% for categorie in categorieDepense %}
                     <div class="categorie-row">
                         <p>{{ categorie.name }}</p>
-                        <a href="{{ path('app_categorie_depense_delete', {'id':categorie.id}) }}">delete</a>
+                        <div>
+                            <a href="{{ path('app_categorie_depense_edit', {'id':categorie.id}) }}">edit</a>
+                        </div>
+
                     </div>
                 {% endfor %}
             </div>
@@ -28,7 +31,9 @@
                 {% for categorie in categorieRevenu %}
                     <div class="categorie-row">
                         <p>{{ categorie.name }}</p>
-                        <a href="{{ path('app_categorie_revenu_delete', {'id':categorie.id}) }}">delete</a>
+                        <div>
+                        <a href="{{ path('app_categorie_revenu_edit', {'id':categorie.id}) }}">edit</a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>

@@ -65,13 +65,15 @@ class HomeController extends AbstractController
                 $totalMontant = 0;
                 $totalPrevu = 0;
                 foreach ($depenseAll as $d) {
-                    array_push($statDepense, $d->getMontant());
                     $totalMontant = $totalMontant + $d->getMontant();
                 }
+
 
                 foreach ($prevuAll as $p) {
                     $totalPrevu = $totalPrevu + $p->getMontant();
                 }
+
+                array_push($statDepense, $totalMontant);
 
                 $depense[$categoriDepense->getName()] =  ['reel' => ['detail' => $depenseAll, 'totalMontant' => $totalMontant], 'prevu' => ['detail' => $prevuAll, 'totalMontant' => $totalPrevu], 'diff' => ['totalMontant' => $totalPrevu - $totalMontant]];
             }

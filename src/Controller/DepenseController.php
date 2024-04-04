@@ -78,7 +78,7 @@ class DepenseController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_depense_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('depense/edit.html.twig', [
@@ -95,6 +95,6 @@ class DepenseController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_depense_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
     }
 }
